@@ -1,5 +1,5 @@
-const existingPins = ["123456", "234567", "345678", "456789", "567890"];
-
+/* const existingPins = ["123456", "234567", "345678", "456789", "567890"];
+ */
 function generateUniquePin(existingPins) {
   const generateRandomNum = () => Math.floor(100000 + Math.random() * 900000);
 
@@ -7,7 +7,9 @@ function generateUniquePin(existingPins) {
   let attempts = 0;
 
   while (
-    (hasDuplicateDigits(pinCode) || existingPins.includes(pinCode)) &&
+    (hasDuplicateDigits(pinCode) ||
+      existingPins.includes(pinCode.toString()) ||
+      isSequentialNumber(pinCode)) &&
     attempts < 10000
   ) {
     pinCode = generateRandomNum();
@@ -22,26 +24,37 @@ function generateUniquePin(existingPins) {
 }
 
 function hasDuplicateDigits(code) {
-  const digits = code.toString().split(""); // splits 6 digit number into an array
-  // if the set contains duplicates it will remove them thus it will not equal the same length
+  // returns true if the code has duplicate digits
+  const digits = code.toString().split("");
   return new Set(digits).size !== digits.length;
 }
 
-function generateUniquePinTest() {
-  for (let i = 0; i < 1000; i++) {
+function isSequentialNumber(code) {
+  // returns true is the number has sequential numbers
+  const digits = code.toString().split("");
+  return digits.every((digit, index, arr) => {
+    console.log(arr);
+    if (index === arr.length - 1) return true; // skip the last digit
+    return +arr[index + 1] === +digit + 1 || +arr[index + 1] === +digit - 1;
+  });
+}
+
+/* function generateUniquePinTest() {
+  for (let i = 0; i < 100; i++) {
     const newPin = generateUniquePin(existingPins);
 
-    if (existingPins.includes(newPin)) {
-      // logs if a duplicate is found
+    if (existingPins.includes(newPin.toString())) {
       console.log(`duplicate found! ${newPin}`);
       return;
     }
 
-    existingPins.push(newPin);
+    existingPins.push(newPin.toString());
     console.log(newPin);
   }
 
   console.log("No duplicates found!");
 }
 
-generateUniquePinTest();
+generateUniquePinTest(); */
+
+export default generateUniquePin;
