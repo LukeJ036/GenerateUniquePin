@@ -30,11 +30,9 @@ function hasDuplicateDigits(code) {
 }
 
 function isSequentialNumber(code) {
-  // returns true is the number has sequential numbers
-  const digits = code.toString().split("");
-  return digits.every((digit, index, arr) => {
-    if (index === arr.length - 1) return true; // skip the last digit
-    return +arr[index + 1] === +digit + 1 || +arr[index + 1] === +digit - 1;
+  const digits = code.toString().split("").map(Number); // convert digits to numbers
+  return digits.slice(1).every((digit, index) => {
+    return digit === digits[index] + 1 || digit === digits[index] - 1;
   });
 }
 
